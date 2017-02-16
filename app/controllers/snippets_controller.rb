@@ -10,9 +10,7 @@ class SnippetsController < ApplicationController
   def create
     @snippet = Snippet.new(snippet_params)
     if @snippet.save
-      uri = URI.parse("http://dpaste.com/api/v2/")
-      request = Net::HTTP.post_form(uri, lang: @snippet.language, code: @snippet.plain_code)
-      @snippet.update_attribute(:highlighted_code, request.body.to_s.encode)
+    	DpasteWorker.perform_async(@snippet.id)
       redirect_to @snippet
     else
       render :new
