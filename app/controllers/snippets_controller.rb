@@ -10,8 +10,8 @@ class SnippetsController < ApplicationController
   def create
     @snippet = Snippet.new(snippet_params)
     if @snippet.save
-    	#DpasteWorker.perform_async(@snippet.id)
-    	DpasteWorker.perform_in(1.minute, @snippet.id)
+    	DpasteWorker.perform_async(@snippet.id)
+    	#DpasteWorker.perform_in(1.minute, @snippet.id)
       redirect_to @snippet
     else
       render :new
